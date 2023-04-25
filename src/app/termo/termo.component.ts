@@ -18,18 +18,57 @@ export class TermoComponent implements OnInit {
 
   previousValue = '';
 
-  handleInput(event: Event): void {
-    const currentValue = (event.target as HTMLInputElement).value;
-    console.log(currentValue);
-
-    if (currentValue.length > 1) {
-      (event.target as HTMLInputElement).value = this.previousValue;
+  handleInput(event:any, indexTentativa: number, indexLetra: number) {
+    const inputValue = event.target.value;;
+    const avanca_input = () =>{
+      let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra + 1}`) as HTMLInputElement;
+      if (proximo_input) {
+        proximo_input.value = '';
+        setTimeout(() => {
+          proximo_input?.focus();
+          
+        });
+      }
     }
-
-    this.previousValue = currentValue;
+    const volta_input = () =>{
+      let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra - 1}`) as HTMLInputElement;
+      if (proximo_input) {
+        setTimeout(() => {
+          proximo_input?.focus();
+          
+        });
+      }
+    }
+    console.log(event)
+    this.previousValue = inputValue;
+    this.tentativas[indexTentativa][indexLetra] = inputValue;
+    
+    if(!this.validarLetra(inputValue)){
+        this.tentativas[indexTentativa][indexLetra] = '';
+    }
+    
+    if(inputValue.length > 1){
+        console.log(this.tentativas[indexTentativa][indexLetra]);
+        this.tentativas[indexTentativa][indexLetra] = this.tentativas[indexTentativa][indexLetra][1];
+      }
+      
+      const tentativas = JSON.parse(JSON.stringify(this.tentativas));
+      this.tentativas = JSON.parse(JSON.stringify(tentativas));
+      
+      setTimeout(() => { 
+        if(event.inputType == "deleteContentBackward"){
+          volta_input();
+        }else{
+          avanca_input();
+        }
+    });
+    
+    
+    
   }
 
   ngOnInit(): void {
+
     this.getPalavras();
   }
 
@@ -64,15 +103,15 @@ export class TermoComponent implements OnInit {
   }
 
   insere_caracter(indexTentativa: number, indexLetra: number) {
-    
+
     let input_atual = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra}`) as HTMLInputElement;
-    
+
     if (input_atual.value.length > 1) {
       input_atual.value = this.previousValue;
     }
 
     this.previousValue = input_atual.value;
-    
+
     setTimeout(() => {
 
 
@@ -86,15 +125,7 @@ export class TermoComponent implements OnInit {
 
       } else {
 
-        let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra + 1}`) as HTMLInputElement;
-        
-        if (proximo_input) {
-          proximo_input.value = '';
-          setTimeout(() => {
-            proximo_input?.focus();
 
-          });
-        }
 
       }
 
