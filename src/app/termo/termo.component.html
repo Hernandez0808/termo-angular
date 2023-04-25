@@ -1,0 +1,26 @@
+<p>{{palavra_sorteada }}</p>
+<div class="container">
+
+    <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
+        <div class="d-flex justify-content-center">
+            <div class="tamanho_letra m-1" *ngFor="let letra of tentativa; let indexLetra = index;">
+                <input [ngClass]="{'input' : tentativa_atual == indexTentativa , 'input-disabled' : tentativa_atual != indexTentativa}"
+                       [disabled]="tentativa_atual != indexTentativa"
+                       value="{{tentativas[indexTentativa][indexLetra]}}"
+                       (keypress)="insere_caracter(indexTentativa, indexLetra)"
+                       name="resposta_tentativa"
+                       class="text-center w-100 h-100 rounded"
+                       maxlength="1"
+                       (input)="handleInput($event)"
+                       id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}"
+                       >
+            </div>
+        </div>
+    </ng-container>
+    <!-- [(ngModel)]="tentativas[indexTentativa][indexLetra]" -->
+    <div class="d-flex justify-content-center mt-3">
+        <div class="letra-disabled tamanho_letra mx-1" *ngFor="let letra of letras_palavra">
+            <p class="text-center">{{letra}}</p>
+        </div>
+    </div>
+</div>
