@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TermoService } from '../service/termo.service';
 
 @Component({
@@ -16,60 +16,47 @@ export class TermoComponent implements OnInit {
 
   palavra_sorteada: string = "destruído";
 
-  previousValue = '';
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Backspace') {
+      for (let i = 0; this.tentativas.length > i; i++) {
+  
+        const ultmElPreenc = this.tentativas[i].findLastIndex((element: string) => element != '');
+  
+        if (ultmElPreenc != -1) {
+          this.tentativas[i][ultmElPreenc] = '';
 
-  handleInput(event:any, indexTentativa: number, indexLetra: number) {
-    const inputValue = event.target.value;;
-    const avanca_input = () =>{
-      let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra + 1}`) as HTMLInputElement;
-      if (proximo_input) {
-        proximo_input.value = '';
-        setTimeout(() => {
-          proximo_input?.focus();
-          
-        });
+          setTimeout(() => {
+          let input = document.getElementById(`tentativa-${i}-letra-${ultmElPreenc}`) as HTMLElement; 
+            input?.focus();
+          });
+        } 
       }
     }
-    const volta_input = () =>{
-      let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra - 1}`) as HTMLInputElement;
-      if (proximo_input) {
-        setTimeout(() => {
-          proximo_input?.focus();
-          
-        });
+
+    if (event.key === 'Enter') {
+      this.resposta = "";
+  
+        const linhaPreenchida = this.tentativas[this.tentativa_atual].every((element: string) => element != '');
+        
+        if (linhaPreenchida) {
+          this.tentativas[this.tentativa_atual].forEach((letra:string)=>{
+            this.resposta = this.resposta + letra;
+          });
+          console.log(this.resposta);
+
       }
     }
-    console.log(event)
-    this.previousValue = inputValue;
-    this.tentativas[indexTentativa][indexLetra] = inputValue;
-    
-    if(!this.validarLetra(inputValue)){
-        this.tentativas[indexTentativa][indexLetra] = '';
-    }
-    
-    if(inputValue.length > 1){
-        console.log(this.tentativas[indexTentativa][indexLetra]);
-        this.tentativas[indexTentativa][indexLetra] = this.tentativas[indexTentativa][indexLetra][1];
-      }
-      
-      const tentativas = JSON.parse(JSON.stringify(this.tentativas));
-      this.tentativas = JSON.parse(JSON.stringify(tentativas));
-      
-      setTimeout(() => { 
-        if(event.inputType == "deleteContentBackward"){
-          volta_input();
-        }else{
-          avanca_input();
-        }
-    });
-    
-    
-    
   }
 
   ngOnInit(): void {
 
     this.getPalavras();
+
+    setTimeout(() => {
+      let input = document.getElementById(`tentativa-0-letra-0`) as HTMLElement; 
+      input?.focus();
+    });
   }
 
   getPalavras() {
@@ -78,6 +65,7 @@ export class TermoComponent implements OnInit {
     this.termo_service.getFormasDePagamentos().subscribe((lst_palavras: any) => {
       this.palavra_sorteada = this.sorteiaPalavra(lst_palavras.lst_plavras_normais.filter((p: string) => p.length == 5))
       this.letras_palavra = this.palavra_sorteada.split('');
+
       for (let i = 0; 4 >= i; i++) {
         let t: any[] = [];
         this.letras_palavra.forEach(() => {
@@ -87,6 +75,63 @@ export class TermoComponent implements OnInit {
       }
       console.log(this.tentativas)
     })
+  }
+
+  inputChange(event: any, indexTentativa: number, indexLetra: number) {
+    const inputValue = event.target.value;
+    const avanca_input = () => {
+      let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra + 1}`) as HTMLInputElement;
+      if (proximo_input) {
+        proximo_input.value = '';
+        setTimeout(() => {
+          proximo_input?.focus();
+
+        });
+      }
+    }
+
+    this.tentativas[indexTentativa][indexLetra] = inputValue.toUpperCase();
+
+    if (!this.validarLetra(inputValue)) {
+      this.tentativas[indexTentativa][indexLetra] = '';
+    }
+
+    if (inputValue.length > 1) {
+      this.tentativas[indexTentativa][indexLetra] = this.tentativas[indexTentativa][indexLetra][1];
+    }
+
+    // const tentativas = JSON.parse(JSON.stringify(this.tentativas));
+    // this.tentativas = JSON.parse(JSON.stringify(tentativas));
+
+    setTimeout(() => {
+      if (event.inputType == "insertText") {
+        avanca_input();
+      }
+
+    });
+
+  }
+
+  onKeyDownInputFocus(event: KeyboardEvent, indexTentativa: number, indexLetra: number) {
+    const volta_input = () => {
+      let proximo_input = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra - 1}`) as HTMLInputElement;
+      if (proximo_input) {
+        proximo_input?.focus();
+      }
+    }
+
+    if (event.key === 'Backspace') {
+      setTimeout(() => {
+        let input_atual = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra}`) as HTMLInputElement;
+
+        if (input_atual.value == '' && (indexLetra - 1) >= 0) {
+          volta_input();
+
+        } else {
+          input_atual?.focus();
+        }
+      });
+    }
   }
 
   sorteiaPalavra(lst_palavras: string[]): string {
@@ -102,35 +147,18 @@ export class TermoComponent implements OnInit {
     }
   }
 
-  insere_caracter(indexTentativa: number, indexLetra: number) {
-
-    let input_atual = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra}`) as HTMLInputElement;
-
-    if (input_atual.value.length > 1) {
-      input_atual.value = this.previousValue;
+  handleMouseDown(event: MouseEvent) {
+    const input = document.querySelector('input') as HTMLElement;
+    if (!input.contains(event.target as Node)) {
+      event.preventDefault();
     }
+  }
 
-    this.previousValue = input_atual.value;
-
+  acionaFocus(indexTentativa:number, indexLetra:number){
     setTimeout(() => {
-
-
-      if (!this.validarLetra(input_atual.value)) {
-        this.tentativas[indexTentativa][indexLetra] = '';
-        input_atual.value = '';
-
-        setTimeout(() => {
-          input_atual?.focus();
-        });
-
-      } else {
-
-
-
-      }
-
+      let input_atual = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra}`) as HTMLInputElement;
+      input_atual.focus(); 
     });
-
   }
 
 }

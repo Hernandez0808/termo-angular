@@ -1,25 +1,31 @@
 <p>{{palavra_sorteada }}</p>
-<div class="container">
-
+<div class="container box" (mousedown)="handleMouseDown($event)">
+  
+  <div class="position-box">
     <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
-        <div class="d-flex justify-content-center">
-          <div class="tamanho_letra m-1" *ngFor="let letra of tentativa; let indexLetra = index;">
-            <input [ngClass]="{'input' : tentativa_atual == indexTentativa , 'input-disabled' : tentativa_atual != indexTentativa}"
-                   [disabled]="tentativa_atual != indexTentativa"
-                   [value]="tentativas[indexTentativa][indexLetra]"
-                   [(ngModel)]="tentativas[indexTentativa][indexLetra]"
-                   (input)="handleInput($event, indexTentativa, indexLetra)"
-                   name="resposta_tentativa"
-                   class="text-center w-100 h-100 rounded"
-                   id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
-          </div>
+      <div class="d-flex justify-content-center">
+        <div class="tamanho_letra m-1 position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
+          <input
+            [ngClass]="{
+            'input' : tentativa_atual == indexTentativa ,
+            'input-disabled' : tentativa_atual != indexTentativa}"
+            [disabled]="tentativa_atual != indexTentativa" [value]="tentativas[indexTentativa][indexLetra]"
+            [(ngModel)]="tentativas[indexTentativa][indexLetra]"
+            (input)="inputChange($event, indexTentativa, indexLetra)"
+            (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)" autocomplete="off"
+            name="resposta_tentativa" class="text-center w-100 h-100 rounded"
+            id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
+            <span class="bounceIn-label text-center" (click)="acionaFocus(indexTentativa, indexLetra)" [ngClass]="{'bounceIn' : tentativas[indexTentativa][indexLetra], 'pointer': tentativa_atual == indexTentativa}">{{tentativas[indexTentativa][indexLetra]}}</span>
         </div>
-      </ng-container>
-      
-    <!-- [(ngModel)]="tentativas[indexTentativa][indexLetra]" -->
-    <div class="d-flex justify-content-center mt-3">
-        <div class="letra-disabled tamanho_letra mx-1" *ngFor="let letra of letras_palavra">
-            <p class="text-center">{{letra}}</p>
-        </div>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <!-- [(ngModel)]="tentativas[indexTentativa][indexLetra]" -->
+  <div class="d-flex justify-content-center mt-3">
+    <div class="letra-disabled tamanho_letra mx-1" *ngFor="let letra of letras_palavra">
+      <p class="text-center">{{letra}}</p>
     </div>
+  </div>
 </div>
