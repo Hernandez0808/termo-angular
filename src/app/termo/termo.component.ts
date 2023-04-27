@@ -1,5 +1,4 @@
 import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { TermoService } from '../service/termo.service';
 
@@ -10,7 +9,7 @@ import { TermoService } from '../service/termo.service';
 })
 export class TermoComponent implements OnInit {
 
-  constructor(private termo_service: TermoService, private toastr: ToastrService) { }
+  constructor(private termo_service: TermoService) { }
   resposta: string = '';
   tentativa_atual: number = 0;
   tentativas: any[] = [];
@@ -60,7 +59,7 @@ export class TermoComponent implements OnInit {
                 }, 500 * atraso);
                 atraso++;
           });
-
+          this.termo_service.emitiSinalGanhou();
           this.tentativa_atual = 6;
               
         } else {

@@ -6,26 +6,24 @@ import { AppComponent } from './app.component';
 import { TermoComponent } from './termo/termo.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ToastrModule } from 'ngx-toastr';
+import { TesteConfetesComponent } from './teste-confetes/teste-confetes.component';
+import { HelpModalComponent } from './help-modal/help-modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TermoComponent
+    TermoComponent,
+    TesteConfetesComponent,
+    HelpModalComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot(
-      {
-        timeOut: 10000,
-        positionClass: 'toast-top-left',
-        preventDuplicates: true,
-      }
-    ),
+    BrowserAnimationsModule,
+    NgbModule, // required animations module
   ],
   providers: [],
   bootstrap: [AppComponent]

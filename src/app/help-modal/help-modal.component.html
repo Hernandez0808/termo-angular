@@ -1,0 +1,15 @@
+<button class="btn-help" (click)="open(content)"><div>?</div></button>
+<ng-template #content let-modal>
+	<!-- <div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div> -->
+	<div class="modal-body">
+        Descubra as palavras certas. Depois de cada tentativa, as peças mostram o quão perto você está da solução.
+
+        <ng-container *ngFor="let l of 'TURMA'; let i = index;" >
+            <span ngClass="{'existePosCorreta': i == 0}">{{l}}</span>
+        </ng-container> 
+	</div>
+</ng-template>
+

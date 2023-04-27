@@ -22,6 +22,11 @@ export class TermoService {
       )
   }
 
+  recebeSinalGanhou = new EventEmitter<any>();
+  emitiSinalGanhou(){
+    this.recebeSinalGanhou.emit();
+  }
+
 
   handleError(error: HttpErrorResponse) {
     let errorMessage = '';
