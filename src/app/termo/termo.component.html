@@ -1,21 +1,27 @@
 <p>{{palavra_sorteada }}</p>
 <div class="container box" (mousedown)="handleMouseDown($event)">
   
+  <div id="msg" [ngClass]="{'invisible': !msgAviso}">{{msgAviso}}</div>
+
   <div class="position-box">
     <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
-      <div class="d-flex justify-content-center">
-        <div class="tamanho_letra m-1 position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
+      <div class="d-flex justify-content-center" id="tentativa-{{indexTentativa}}">
+        <div class="tamanho_letra position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
           <input
+            #inputs
             [ngClass]="{
             'input' : tentativa_atual == indexTentativa ,
             'input-disabled' : tentativa_atual != indexTentativa}"
-            [disabled]="tentativa_atual != indexTentativa" [value]="tentativas[indexTentativa][indexLetra]"
+            [disabled]="tentativa_atual != indexTentativa"
+            [value]="tentativas[indexTentativa][indexLetra]"
             [(ngModel)]="tentativas[indexTentativa][indexLetra]"
             (input)="inputChange($event, indexTentativa, indexLetra)"
-            (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)" autocomplete="off"
-            name="resposta_tentativa" class="text-center w-100 h-100 rounded"
+            (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)"
+            autocomplete="off"
+            name="resposta_tentativa"
+            class="text-center w-100 h-100 rounded"
             id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
-            <span class="bounceIn-label text-center" (click)="acionaFocus(indexTentativa, indexLetra)" [ngClass]="{'bounceIn' : tentativas[indexTentativa][indexLetra], 'pointer': tentativa_atual == indexTentativa}">{{tentativas[indexTentativa][indexLetra]}}</span>
+            <span class="bounceIn-label text-center" (click)="acionaFocusAtual(indexTentativa, indexLetra)" [ngClass]="{'bounceIn' : tentativas[indexTentativa][indexLetra], 'pointer': tentativa_atual == indexTentativa}">{{tentativas[indexTentativa][indexLetra]}}</span>
         </div>
       </div>
     </ng-container>
