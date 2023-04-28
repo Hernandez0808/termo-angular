@@ -3,8 +3,9 @@
   <div class="d-flex justify-content-between">
     <app-help-modal></app-help-modal>
     <h1>TERMO</h1>
-    <app-help-modal></app-help-modal>
+    <app-statisticas-modal></app-statisticas-modal>
   </div>
+  
   <div id="msg" [ngClass]="{'invisible': !msgAviso}">{{msgAviso}}</div>
   <div class="position-box">
     <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
