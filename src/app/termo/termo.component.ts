@@ -60,7 +60,7 @@ export class TermoComponent implements OnInit {
                 atraso++;
           });
           this.termo_service.emitiSinalGanhou();
-          this.tentativa_atual = 6;
+          this.tentativa_atual = 7;
               
         } else {
 
@@ -145,7 +145,7 @@ export class TermoComponent implements OnInit {
       this.palavra_sorteada = this.sorteiaPalavra(lst_palavras.lst_plavras_normais.filter((p: string) => p.length == 5)).toLocaleUpperCase();
       this.letras_palavra = this.palavra_sorteada.split('');
 
-      for (let i = 0; 4 >= i; i++) {
+      for (let i = 0; 5 >= i; i++) {
         let t: any[] = [];
         this.letras_palavra.forEach(() => {
           t.push('')

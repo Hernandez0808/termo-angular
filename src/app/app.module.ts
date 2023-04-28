@@ -9,13 +9,15 @@ import { FormsModule } from '@angular/forms';
 import { TesteConfetesComponent } from './teste-confetes/teste-confetes.component';
 import { HelpModalComponent } from './help-modal/help-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StatisticasModalComponent } from './statisticas-modal/statisticas-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TermoComponent,
     TesteConfetesComponent,
-    HelpModalComponent
+    HelpModalComponent,
+    StatisticasModalComponent
   ],
   imports: [
     BrowserModule,

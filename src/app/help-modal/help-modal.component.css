@@ -32,9 +32,34 @@
 }
 
 .naoExiste {
-    background-color: #312a2c;
+    background-color: #191516
 }
+.modal-body{
+    color: #bbb;
+    font-family: 'Mitr', sans-serif;
+    background-color: #312B2D !important;
+}
+.letra{
+    color: #fafaff;
+    font-weight: 600;
+    font-size: 1.5em;
+    align-items: center;
+    border: 0.125em solid #4c4347;
+    border-radius: 10%;
+    box-sizing: border-box;
+    display: inline-flex;
+    font-weight: 500;
+    height: 2em;
+    width: 2em;
+    justify-content: center;
+    margin: 0 0.05em;
+}
+p.letra{
+    height: 2em;
+    width: 2em;
+    font-size: 1em;
 
+}
 button {
     z-index: 1000;
     cursor: pointer;
@@ -65,3 +90,14 @@ button div {
     margin: 0 0.25vh;
     transition: transform 0.5s ease-in-out;
 }
+
+@media (max-width: 715px) {
+    .h5{
+        font-size: 0.9rem;
+    }
+    .letra{
+        height: 1.5em;
+        width: 1.5em;
+        font-size: 1.5rem;
+    }
+  }

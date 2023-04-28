@@ -21,6 +21,12 @@ export class TesteConfetesComponent implements OnInit {
         const el = document.querySelector('.js-container') as HTMLElement;
         this._setupElements(el);
         this._renderConfetti();
+
+        // setTimeout(() => {
+
+        //   clearInterval(this.confettiInterval);
+          
+        // },30000);
     });
   }
 
