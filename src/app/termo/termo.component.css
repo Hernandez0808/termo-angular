@@ -106,6 +106,25 @@ h1{
     border-radius: 0.4em;
   }
 
+  button {
+    touch-action: manipulation;
+    outline: none;
+    background-color: #4C4347;
+    grid-column: span 3;
+    display: flex;
+    font-size: 1.5rem;
+    line-height: 1rem;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8%;
+    font-weight: 500;
+    font-family: 'Mitr', sans-serif;
+    cursor: pointer;
+    border: none;
+    color: #FAFAFF;
+  }
+
   .existePosErrada{
     font-size: 0px;
     background-color: #d3ad69;
@@ -118,4 +137,43 @@ h1{
     font-size: 0px;
     background-color: #312a2c;
   }
+
+
+  @media only screen and (min-width: 1400px) {
+    .tamanho_letra{
+      width: 5rem !important;
+      height: 5rem !important;
+      margin: 0.2rem;
+    }
+  }
+
+  @media only screen and (max-width: 720px) {
+    button{
+      font-size: 1rem;
+      line-height: 0.5rem;
+      width: 10px;
+      height: 10px;
+      padding: 0;
+  
+    }
+    .padding-btn{
+      /* padding: 0 !important; */
+      padding-left: 0.8rem !important;
+      padding-right: 0.8rem !important;
+      padding-top: 1.5rem !important;
+      padding-bottom: 1.5rem !important;
+      margin: 0.2rem !important;
+    }
+    .padding-btn-enter{
+      padding-left: 2rem !important;
+      padding-right: 2rem !important;
+
+    }
+
+    .margin{
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+    }
+  }
+
 

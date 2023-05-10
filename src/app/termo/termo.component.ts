@@ -16,6 +16,12 @@ export class TermoComponent implements OnInit {
   letras_palavra: string[] = [];
   msgAviso: string = "";
 
+  lst_alfabeto:string [] =[ 
+      'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+        'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'backspace',
+        'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER'
+      ]
+
   @ViewChildren('inputs', ) lst_inputs!:QueryList<ElementRef>;
   lst_inputs_sub!: Subscription;
   palavra_sorteada: string = "destruído";
