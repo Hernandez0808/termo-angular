@@ -5,7 +5,7 @@
     <h1>TERMO</h1>
     <app-statisticas-modal></app-statisticas-modal>
   </div>
-  
+
   <div id="msg" [ngClass]="{'invisible': !msgAviso}">{{msgAviso}}</div>
   <div class="position-box">
     <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
@@ -26,10 +26,41 @@
     </ng-container>
 
   </div>
+<div class="my-3 mx-5">
 
-  <div class="d-flex justify-content-center mt-3">
+  <!-- <div class="d-flex justify-content-center mt-3">
     <div class="letra-disabled tamanho_letra mx-1" *ngFor="let letra of letras_palavra">
       <p class="text-center">{{letra}}</p>
     </div>
+  </div> -->
+  
+  
+  <div class="d-flex justify-content-center px-5">
+    <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
+      <div class="mx-2 margin" *ngIf="i < 10" style="padding: 0;">
+        <button class="px-4 py-3 padding-btn">{{ letra }}</button>
+      </div>
+    </ng-container>
   </div>
+
+  <div class="d-flex justify-content-center">
+    
+    <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
+      <div class="mx-1 mt-1 margin" *ngIf="i >= 10 && i < 20">
+        <button class="px-4 py-3 padding-btn" *ngIf="letra != 'backspace'">{{ letra }}</button>
+        <button class="px-4 py-3 padding-btn" *ngIf="letra == 'backspace'"><i class="bi bi-backspace"></i></button>
+      </div>
+    </ng-container>
+  </div>
+  
+  <div class="d-flex justify-content-center">
+    
+    <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
+      <div class="mx-1 margin" *ngIf="i >= 20">
+        <button class="px-4 py-3 padding-btn" [ngClass]="{'padding-btn-enter': letra == 'ENTER'}">{{ letra }}</button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
 </div>
