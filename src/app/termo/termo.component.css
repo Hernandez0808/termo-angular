@@ -94,6 +94,7 @@ h1{
     z-index: 20000;
     background-color: #009AFE;
     display: flex;
+
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -139,15 +140,31 @@ h1{
   }
 
 
-  @media only screen and (min-width: 1400px) {
+  @media only screen and (min-width: 850px) and (min-height:850px){
     .tamanho_letra{
       width: 5rem !important;
       height: 5rem !important;
       margin: 0.2rem;
+
+    }
+    .bounceIn-label{
+      font-size: 3.5rem;
+      width: 5rem ;
+      height: 5rem; 
     }
   }
 
-  @media only screen and (max-width: 720px) {
+  @media only screen and (max-width: 815px), (max-height:635px) {
+    button{
+      font-size: 1.5rem;
+      line-height: 0.5rem;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+  
+    }
+  }
+  @media only screen and (max-width: 660px), (max-height:635px) {
     button{
       font-size: 1rem;
       line-height: 0.5rem;
@@ -174,6 +191,30 @@ h1{
       margin-right: 0 !important;
       margin-left: 0 !important;
     }
+  }
+  @media only screen and (max-width: 280px) {
+    button{
+      font-size: 0.9rem;
+      line-height: 0.3rem;
+      width: 23px;
+      height: 23px;
+      padding: 0;
+  
+    }
+    .padding-btn{
+      /* padding: 0 !important; */
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+      margin: 0.1rem !important;
+    }
+    .padding-btn-enter{
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+
+    }
+
   }
 
 

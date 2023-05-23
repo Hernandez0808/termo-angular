@@ -12,7 +12,7 @@ export class HelpModalComponent implements OnInit {
   }
 
 	open(content:any) {
-		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
+		this.modalService.open(content, { scrollable:true })
   }
 
 }

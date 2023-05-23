@@ -1,4 +1,4 @@
-<div class="container box" (mousedown)="handleMouseDown($event)">
+<div class="container d-flex flex-column vh-100" (mousedown)="handleMouseDown($event)">
 
   <div class="d-flex justify-content-between">
     <app-help-modal></app-help-modal>
@@ -7,60 +7,57 @@
   </div>
 
   <div id="msg" [ngClass]="{'invisible': !msgAviso}">{{msgAviso}}</div>
-  <div class="position-box">
-    <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
-      <div class="d-flex justify-content-center" id="tentativa-{{indexTentativa}}">
-        <div class="tamanho_letra position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
-          <input #inputs [ngClass]="{
+  <div class="flex-grow-1">
+      <div class="d-flex  justify-content-center align-items-center h-100">
+        <div>
+          <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
+            <div class="d-flex justify-content-center" id="tentativa-{{indexTentativa}}">
+          <div class="tamanho_letra position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
+            <input #inputs [ngClass]="{
                 'input' : tentativa_atual == indexTentativa ,
                 'input-disabled' : tentativa_atual != indexTentativa}" [disabled]="tentativa_atual != indexTentativa"
-            [value]="tentativas[indexTentativa][indexLetra]" [(ngModel)]="tentativas[indexTentativa][indexLetra]"
-            (input)="inputChange($event, indexTentativa, indexLetra)"
-            (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)" autocomplete="off"
-            name="resposta_tentativa" class="text-center w-100 h-100 rounded"
-            id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
-          <span class="bounceIn-label text-center" (click)="acionaFocusAtual(indexTentativa, indexLetra)"
-            [ngClass]="{'bounceIn' : tentativas[indexTentativa][indexLetra], 'pointer': tentativa_atual == indexTentativa}">{{tentativas[indexTentativa][indexLetra]}}</span>
-        </div>
+                [value]="tentativas[indexTentativa][indexLetra]" [(ngModel)]="tentativas[indexTentativa][indexLetra]"
+              (input)="inputChange($event, indexTentativa, indexLetra)"
+              (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)" autocomplete="off"
+              name="resposta_tentativa" class="text-center w-100 h-100 rounded"
+              id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
+              <span class="bounceIn-label text-center" (click)="acionaFocusAtual(indexTentativa, indexLetra)"
+              [ngClass]="{'bounceIn' : tentativas[indexTentativa][indexLetra], 'pointer': tentativa_atual == indexTentativa}">{{tentativas[indexTentativa][indexLetra]}}</span>
+            </div>
+          </div>
+        </ng-container>
       </div>
-    </ng-container>
-
-  </div>
-<div class="my-3 mx-5">
-
-  <!-- <div class="d-flex justify-content-center mt-3">
-    <div class="letra-disabled tamanho_letra mx-1" *ngFor="let letra of letras_palavra">
-      <p class="text-center">{{letra}}</p>
     </div>
-  </div> -->
-  
-  
-  <div class="d-flex justify-content-center px-5">
-    <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
-      <div class="mx-2 margin" *ngIf="i < 10" style="padding: 0;">
-        <button class="px-4 py-3 padding-btn">{{ letra }}</button>
-      </div>
-    </ng-container>
   </div>
 
-  <div class="d-flex justify-content-center">
-    
-    <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
-      <div class="mx-1 mt-1 margin" *ngIf="i >= 10 && i < 20">
-        <button class="px-4 py-3 padding-btn" *ngIf="letra != 'backspace'">{{ letra }}</button>
-        <button class="px-4 py-3 padding-btn" *ngIf="letra == 'backspace'"><i class="bi bi-backspace"></i></button>
-      </div>
-    </ng-container>
-  </div>
-  
-  <div class="d-flex justify-content-center">
-    
-    <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
-      <div class="mx-1 margin" *ngIf="i >= 20">
-        <button class="px-4 py-3 padding-btn" [ngClass]="{'padding-btn-enter': letra == 'ENTER'}">{{ letra }}</button>
-      </div>
-    </ng-container>
-  </div>
-</div>
+  <div class="mt-auto p-2">
 
+    <div class="d-flex justify-content-center px-5">
+      <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
+        <div class="mx-2 margin" *ngIf="i < 10" style="padding: 0;">
+          <button class="p-4 padding-btn">{{ letra }}</button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="d-flex justify-content-center">
+
+      <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
+        <div class="mx-1 mt-1 margin" *ngIf="i >= 10 && i < 20">
+          <button class="p-4 padding-btn" *ngIf="letra != 'backspace'">{{ letra }}</button>
+          <button class="p-4 padding-btn" *ngIf="letra == 'backspace'"><i class="bi bi-backspace"></i></button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="d-flex justify-content-center">
+
+      <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
+        <div class="mx-1 margin" *ngIf="i >= 20">
+          <button class="p-4 padding-btn" [ngClass]="{'padding-btn-enter': letra == 'ENTER'}">{{ letra
+            }}</button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 </div>
