@@ -14,7 +14,7 @@ export class TermoService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
 
-  getFormasDePagamentos(): Observable<any> {
+  getPalavras(): Observable<any> {
     return this.httpClient.get<any>(this.url, this.httpOptions)
       .pipe(
         retry(2),

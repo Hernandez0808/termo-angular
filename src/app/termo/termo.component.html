@@ -1,8 +1,8 @@
-<div class="container d-flex flex-column box" (mousedown)="handleMouseDown($event)">
+<div class="container d-flex flex-column box" (mousedown)="handleMouseDown()">
 
   <div class="d-flex justify-content-between">
     <app-help-modal></app-help-modal>
-    <h1>TERMO - {{vh}}</h1>
+    <h1>TERMO</h1>
     <app-statisticas-modal></app-statisticas-modal>
   </div>
 
@@ -15,8 +15,9 @@
           <div class="tamanho_letra position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
             <input readonly #inputs [ngClass]="{
                 'input' : tentativa_atual == indexTentativa ,
-                'input-disabled' : tentativa_atual != indexTentativa}" [disabled]="tentativa_atual != indexTentativa"
-                [value]="tentativas[indexTentativa][indexLetra]" [(ngModel)]="tentativas[indexTentativa][indexLetra]"
+                'input-disabled' : tentativa_atual != indexTentativa}" 
+              [disabled]="tentativa_atual != indexTentativa"
+              [value]="tentativas[indexTentativa][indexLetra]" [(ngModel)]="tentativas[indexTentativa][indexLetra]"
               autocomplete="off"
               name="resposta_tentativa" class="text-center w-100 h-100 rounded"
               id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
@@ -29,15 +30,12 @@
     </div>
   </div>
 
-  <!-- (input)="inputChange($event, '', indexTentativa, indexLetra)"
-  (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)"  -->
-
   <div class="mt-auto p-2">
 
     <div class="d-flex justify-content-center px-5">
       <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
         <div class="mx-2 margin" *ngIf="i < 10" style="padding: 0;">
-          <button translate="no" class="p-4 padding-btn" (click)="setLetra(letra)">{{ letra }}</button>
+          <button translate="no" [disabled]="tentativa_atual == 6" class="p-4 padding-btn" (click)="setLetraTecladoDigital(letra)">{{ letra }}</button>
         </div>
       </ng-container>
     </div>
@@ -46,8 +44,8 @@
 
       <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
         <div class="mx-1 mt-1 margin" *ngIf="i >= 10 && i < 20">
-          <button translate="no" class="p-4 padding-btn" *ngIf="letra != 'backspace'" (click)="setLetra(letra)">{{ letra }}</button>
-          <button translate="no" class="p-4 padding-btn" *ngIf="letra == 'backspace'" (click)="setLetra(letra)"><i class="bi bi-backspace"></i></button>
+          <button translate="no" [disabled]="tentativa_atual == 6" class="p-4 padding-btn" *ngIf="letra != 'backspace'" (click)="setLetraTecladoDigital(letra)">{{ letra }}</button>
+          <button translate="no" [disabled]="tentativa_atual == 6" class="p-4 padding-btn" *ngIf="letra == 'backspace'" (click)="setLetraTecladoDigital(letra)"><i class="bi bi-backspace"></i></button>
         </div>
       </ng-container>
     </div>
@@ -56,7 +54,7 @@
 
       <ng-container *ngFor="let letra of lst_alfabeto; let i = index;">
         <div class="mx-1 margin" *ngIf="i >= 20">
-          <button translate="no" class="p-4 padding-btn" [ngClass]="{'padding-btn-enter': letra == 'ENTER'}" (click)="setLetra(letra)">{{ letra }}</button>
+          <button translate="no" [disabled]="tentativa_atual == 6" class="p-4 padding-btn" [ngClass]="{'padding-btn-enter': letra == 'ENTER'}" (click)="setLetraTecladoDigital(letra)">{{ letra }}</button>
         </div>
       </ng-container>
     </div>
