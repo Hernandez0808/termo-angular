@@ -52,10 +52,10 @@ export class TermoComponent implements OnInit {
     }
 
   }
-
+  vh:number = 0;
   ngOnInit(): void {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    this.vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${this.vh}px`);
     this.getPalavras();
 
   }
