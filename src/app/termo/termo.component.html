@@ -17,8 +17,7 @@
                 'input' : tentativa_atual == indexTentativa ,
                 'input-disabled' : tentativa_atual != indexTentativa}" [disabled]="tentativa_atual != indexTentativa"
                 [value]="tentativas[indexTentativa][indexLetra]" [(ngModel)]="tentativas[indexTentativa][indexLetra]"
-              (input)="inputChange($event, '', indexTentativa, indexLetra)"
-              (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)" autocomplete="off"
+              autocomplete="off"
               name="resposta_tentativa" class="text-center w-100 h-100 rounded"
               id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
               <span class="bounceIn-label text-center" (click)="acionaFocusAtual(indexTentativa, indexLetra)"
@@ -29,6 +28,9 @@
       </div>
     </div>
   </div>
+
+  <!-- (input)="inputChange($event, '', indexTentativa, indexLetra)"
+  (keydown)="onKeyDownInputFocus($event, indexTentativa, indexLetra)"  -->
 
   <div class="mt-auto p-2">
 

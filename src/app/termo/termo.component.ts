@@ -27,14 +27,30 @@ export class TermoComponent implements OnInit {
   palavra_sorteada: string = "destruído";
 
   @HostListener('document:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Backspace') {
+  async onKeyDown(event: KeyboardEvent) {
+    event.preventDefault();
+
+    let objLinhaLetraFocus = this.objLinhaLetraFocus();
+    
+    if(!objLinhaLetraFocus){
+      await this.focusPriEl();
+      objLinhaLetraFocus = this.objLinhaLetraFocus();
+    }
+    console.log(objLinhaLetraFocus && event.key != 'Backspace' && event.key != 'Enter')
+    if (objLinhaLetraFocus && event.key != 'Backspace' && event.key != 'Enter') {
+      const {indexLinha, indexLetra} = objLinhaLetraFocus
+      
+      this.inputChange(event, '', indexLinha, indexLetra);
+    }
+
+    else if (event.key === 'Backspace') {
       this.backspaceUltEl();
     }
 
-    if (event.key === 'Enter') {
+    else if (event.key === 'Enter') {
       this.enterTentativa();
     }
+
   }
 
   ngOnInit(): void {
@@ -43,45 +59,30 @@ export class TermoComponent implements OnInit {
 
   }
 
-  ngAfterViewInit(): void {
-
-    // this.lst_inputs.changes.subscribe(() => {
-    //   const firstElement = this.lst_inputs.first;
-    //   if (firstElement) {
-    //     firstElement.nativeElement.focus();
-    //     this.lst_inputs_sub.unsubscribe();
-    //   }
-    // });
-    // console.log();
-  }
-
-  // ngOnDestroy(): void {
-  //   this.lst_inputs_sub.unsubscribe();
-  // }
-
-  
-
-  getPalavras() {
+  async getPalavras() {
     this.tentativas = [];
     this.letras_palavra = [];
-    this.termo_service.getFormasDePagamentos().subscribe((lst_palavras: any) => {
+    this.termo_service.getFormasDePagamentos().subscribe(async (lst_palavras: any) => {
       this.palavra_sorteada = this.sorteiaPalavra(lst_palavras.lst_plavras_normais.filter((p: string) => p.length == 5)).toLocaleUpperCase();
       this.letras_palavra = this.palavra_sorteada.split('');
-
-      for (let i = 0; 5 >= i; i++) {
-        let t: any[] = [];
-        this.letras_palavra.forEach(() => {
-          t.push('')
-        });
-        this.tentativas.push(t);
-      }
+      console.log(this.palavra_sorteada);
+        for (let i = 0; 5 >= i; i++) {
+          let t: any[] = [];
+          this.letras_palavra.forEach(() => {
+            t.push('')
+          });
+          this.tentativas.push(t);
+        }
+      
+ 
+      await this.focusPriEl();
     })
   }
 
   inputChange(event: any, tecla_click:string, indexTentativa: number, indexLetra: number) {
     let inputValue;
     if(event){
-      inputValue = event.target.value;
+      inputValue = event.key;
     }else{
       inputValue = tecla_click;
     }
@@ -95,11 +96,6 @@ export class TermoComponent implements OnInit {
 
         });
       }
-    }
-
-    if(inputValue == 'backspace'){
-      this.backSpaceClick(indexTentativa, indexLetra);
-      return
     }
 
     if (!this.validarLetra(inputValue)) {
@@ -126,10 +122,6 @@ export class TermoComponent implements OnInit {
     if (inputValue.length > 1) {
       this.tentativas[indexTentativa][indexLetra] = this.tentativas[indexTentativa][indexLetra][1];
     }
-
-
-    // const tentativas = JSON.parse(JSON.stringify(this.tentativas));
-    // this.tentativas = JSON.parse(JSON.stringify(tentativas));
 
   }
 
@@ -162,7 +154,7 @@ export class TermoComponent implements OnInit {
   }
 
   validarLetra(letra: string): boolean {
-    const regex = /^[a-zA-Z ]+$/; // aceita apenas letras sem acentos e espaços
+    const regex = /^[a-zA-Z ]{1}$/;// aceita apenas letras sem acentos e espaços
     if (regex.test(letra)) {
       return true;
     } else {
@@ -184,20 +176,35 @@ export class TermoComponent implements OnInit {
     });
   }
 
-  setLetra(letra_click:string){
+  objLinhaLetraFocus(){
     const regex = /tentativa-(\d+)-letra-(\d+)/;
-    const elemento_focus = this.elRef.nativeElement.querySelector(':focus');
+    let elemento_focus = this.elRef.nativeElement.querySelector(':focus');
     const resultado = regex.exec(elemento_focus?.id);
-    if (resultado) {
-      const tentativa = Number(resultado[1]);
-      const letra = Number(resultado[2]);
+    if(resultado){
+      const objReturn = {indexLinha:Number(resultado[1]), indexLetra:Number(resultado[2])};
+      return objReturn;
+    }
+    return null;
+  }
+
+  async setLetra(letra_click:string){
+    let objLinhaLetraFocus = this.objLinhaLetraFocus();
+    
+    if(!objLinhaLetraFocus){
+      await this.focusPriEl();
+      objLinhaLetraFocus = this.objLinhaLetraFocus();
+    }
+
+    if (objLinhaLetraFocus && letra_click != 'backspace' && letra_click != 'ENTER') {
+      const {indexLinha, indexLetra} = objLinhaLetraFocus
       
-      this.inputChange(null, letra_click, tentativa, letra);
+      this.inputChange(null, letra_click, indexLinha, indexLetra);
 
     } else if(letra_click == 'backspace'){
       this.backspaceUltEl();
-    }else if(letra_click == 'ENTER'){
-      this.enterTentativa()
+
+    } else if(letra_click == 'ENTER'){
+      this.enterTentativa();
     }
   }
 
@@ -210,7 +217,8 @@ export class TermoComponent implements OnInit {
     }
     
     this.msgAviso = "";
-    this.tentativas[indexTentativa][indexLetra] = '';
+    console.log(indexTentativa);
+    this.tentativas[indexTentativa][indexLetra] = JSON.parse(JSON.stringify(''));
     setTimeout(() => {
       let input_atual = document.getElementById(`tentativa-${indexTentativa}-letra-${indexLetra}`) as HTMLInputElement;
       
@@ -224,36 +232,34 @@ export class TermoComponent implements OnInit {
   }
 
   backspaceUltEl(){
-    for (let i = 0; this.tentativas.length > i; i++) {
-
-      const ultmElPreenc = this.tentativas[i].findLastIndex((element: string) => element != '');
+      const ultmElPreenc = this.tentativas[this.tentativa_atual].findLastIndex((element: string) => element != '');
 
       if (ultmElPreenc != -1) {
-        this.tentativas[i][ultmElPreenc] = '';
+        this.tentativas[this.tentativa_atual][ultmElPreenc] = JSON.parse(JSON.stringify(''));
 
         setTimeout(() => {
-          let input = document.getElementById(`tentativa-${i}-letra-${ultmElPreenc}`) as HTMLElement;
+          let input = document.getElementById(`tentativa-${this.tentativa_atual}-letra-${ultmElPreenc}`) as HTMLElement;
           input?.focus();
         });
-        break;
-      }
     }
   }
 
-  focusPriEl(){
-    for (let i = 0; this.tentativas.length > i; i++) {
+  focusPriEl(): Promise<void> {
 
-      const priEl = this.tentativas[i].findIndex((element: string) => element == '');
-
-      if (priEl != -1) {
-
-        setTimeout(() => {
-          let input = document.getElementById(`tentativa-${i}-letra-${priEl}`) as HTMLElement;
-          input?.focus();
-        });
-        break;
+    return new Promise((resolve) => {
+      for (let i = 0; this.tentativas.length > i; i++) {
+        const priEl = this.tentativas[i].findIndex((element: string) => element == '');
+        console.log(priEl != -1);
+        if (priEl != -1) {
+          setTimeout(() => {
+            let input = document.getElementById(`tentativa-${i}-letra-${priEl}`) as HTMLElement;
+            input?.focus();
+            resolve(); 
+          });
+          break;
+        }
       }
-    }
+    });
   }
 
   enterTentativa(){
