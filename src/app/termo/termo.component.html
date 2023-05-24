@@ -13,7 +13,7 @@
           <ng-container *ngFor="let tentativa of tentativas; let indexTentativa = index;">
             <div class="d-flex justify-content-center" id="tentativa-{{indexTentativa}}">
           <div class="tamanho_letra position-relative" *ngFor="let letra of tentativa; let indexLetra = index;">
-            <input #inputs [ngClass]="{
+            <input readonly #inputs [ngClass]="{
                 'input' : tentativa_atual == indexTentativa ,
                 'input-disabled' : tentativa_atual != indexTentativa}" [disabled]="tentativa_atual != indexTentativa"
                 [value]="tentativas[indexTentativa][indexLetra]" [(ngModel)]="tentativas[indexTentativa][indexLetra]"
