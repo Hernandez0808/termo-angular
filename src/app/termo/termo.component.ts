@@ -25,6 +25,17 @@ export class TermoComponent implements OnInit {
   @ViewChildren('inputs', ) lst_inputs!:QueryList<ElementRef>;
   lst_inputs_sub!: Subscription;
   palavra_sorteada: string = "destruído";
+  vh:number = 0;
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.atualizarAlturaVh();
+  }
+
+  // @HostListener('DOMContentLoaded')
+  // onDomLoaded() {
+    
+  // }
 
   @HostListener('document:keydown', ['$event'])
   async onKeyDown(event: KeyboardEvent) {
@@ -52,12 +63,17 @@ export class TermoComponent implements OnInit {
     }
 
   }
-  vh:number = 0;
   ngOnInit(): void {
-    this.vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${this.vh}px`);
+    // this.vh = window.innerHeight * 0.01;
+    // document.documentElement.style.setProperty('--vh', `${this.vh}px`);.
+    this.atualizarAlturaVh();
     this.getPalavras();
 
+  }
+
+  atualizarAlturaVh() {
+    this.vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${this.vh}px`);
   }
 
   async getPalavras() {
