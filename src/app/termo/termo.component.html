@@ -22,7 +22,12 @@
               name="resposta_tentativa" class="text-center w-100 h-100 rounded"
               id="tentativa-{{indexTentativa}}-letra-{{indexLetra}}">
               <span class="bounceIn-label text-center" (click)="acionaFocusAtual(indexTentativa, indexLetra)"
-              [ngClass]="{'bounceIn' : tentativas[indexTentativa][indexLetra], 'pointer': tentativa_atual == indexTentativa}">{{tentativas[indexTentativa][indexLetra]}}</span>
+              [ngClass]="{
+                  'bounceIn' : tentativas[indexTentativa][indexLetra] && !regex_vogais.test(tentativas[indexTentativa][indexLetra]),
+                  'pointer': tentativa_atual == indexTentativa}">
+                  {{letraComAcento(tentativas[indexTentativa][indexLetra], indexTentativa, indexLetra)}}
+              </span>
+              
             </div>
           </div>
         </ng-container>

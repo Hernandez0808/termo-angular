@@ -64,13 +64,12 @@ export class TesteConfetesComponent implements OnInit {
       
       confettiEl.classList.add('confetti', 'confetti--animation-' + confettiAnimation);
 
-      console.log(confettiEl)
 
       confettiEl.style.left = confettiLeft;
       confettiEl.style.width = confettiSize;
       confettiEl.style.height = confettiSize;
       confettiEl.style.backgroundColor = confettiBackground;
-      console.log(confettiEl);
+
 
   
       const removeTimeout = setTimeout(function() {

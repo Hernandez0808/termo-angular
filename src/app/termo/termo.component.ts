@@ -22,6 +22,10 @@ export class TermoComponent implements OnInit {
     'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER'
   ]
 
+  regex_vogais = /[áàãâéèẽêíìĩîóòõôúùũûç]/i;
+  regex_vogais_sem_acento = /[aeiouc]/i;
+  lst_vogais_acentuadas: string[] = [];
+
   lst_inputs_sub!: Subscription;
   palavra_sorteada: string = "destruído";
   vh: number = 0;
@@ -67,16 +71,24 @@ export class TermoComponent implements OnInit {
   async getPalavras() {
     this.tentativas = [];
     this.letras_palavra = [];
+    this.lst_vogais_acentuadas = [];
     this.termo_service.getPalavras().subscribe(async (lst_palavras: any) => {
       this.palavra_sorteada = this.sorteiaPalavra(lst_palavras.lst_plavras_normais.filter((p: string) => p.length == 5)).toLocaleUpperCase();
+      // this.palavra_sorteada = 'CÚRUÇ'.toLocaleUpperCase();
       this.letras_palavra = this.palavra_sorteada.split('');
-
-      for (let i = 0; 5 >= i; i++) {
+      console.log(this.palavra_sorteada)
+      for (let i = 0; this.palavra_sorteada.length >= i; i++) {
         let t: any[] = [];
         this.letras_palavra.forEach(() => {
           t.push('')
         });
         this.tentativas.push(t);
+
+        if (this.regex_vogais.test(this.palavra_sorteada[i])) {
+          this.lst_vogais_acentuadas.push(this.palavra_sorteada[i]);
+        } else {
+          this.lst_vogais_acentuadas.push('');
+        }
       }
 
 
@@ -89,7 +101,7 @@ export class TermoComponent implements OnInit {
   }
 
   async setLetraTecladoDigital(letra_click: string) {
-    
+
     await this.focusPriEl();
 
     const objLinhaLetraFocus = this.objLinhaLetraFocus();
@@ -107,7 +119,6 @@ export class TermoComponent implements OnInit {
     }
 
   }
-
 
   async inputChange(event: any, tecla_click: string, indexTentativa: number, indexLetra: number) {
     let inputValue;
@@ -170,10 +181,10 @@ export class TermoComponent implements OnInit {
     return null;
   }
 
-  enterTentativa() {
+ async enterTentativa() {
     this.resposta = "";
 
-    const setClassMsg = () =>{
+    const setClassMsg = () => {
       let tentativaAviso = document.getElementById('msg') as HTMLElement;
 
       tentativaAviso.classList.add('zoomIn');
@@ -187,21 +198,25 @@ export class TermoComponent implements OnInit {
     const linhaTotalmenteVazia = this.tentativas[this.tentativa_atual].every((element: string) => element == '');
     if (linhaTotalmentePreenchida) {
 
-      this.tentativas[this.tentativa_atual].forEach((letra: string) => {
-        this.resposta += letra;
-      });
+      await this.montaRepostaDaMatriz();
 
       if (this.resposta == this.palavra_sorteada) {
+
+          
         let atraso = 0;
-        this.tentativas[this.tentativa_atual].forEach((letra: string, index: number) => {
-          let l = document.getElementById(`tentativa-${this.tentativa_atual}-letra-${index}`);
+        this.tentativas[this.tentativa_atual].forEach(async (letra: string, index: number) => {
+          let input = document.getElementById(`tentativa-${this.tentativa_atual}-letra-${index}`) as HTMLInputElement;
+  
           setTimeout(() => {
-            l?.classList.add('flipInY');
-            l?.classList.add('existePosCorreta');
+            input?.classList.add('flipInY');
+            input?.classList.add('existePosCorreta');
           }, 500 * atraso);
           atraso++;
         });
+          
+ 
         this.termo_service.emitiSinalGanhou();
+
         this.tentativa_atual = 7;
 
       } else {
@@ -210,30 +225,42 @@ export class TermoComponent implements OnInit {
         this.tentativas[this.tentativa_atual].forEach((letra: string, index: number) => {
           let l = document.getElementById(`tentativa-${this.tentativa_atual}-letra-${index}`);
 
-          if (this.palavra_sorteada[index] == letra) {
+
+          if (this.palavra_sorteada[index] == this.resposta[index]) {
+
             setTimeout(() => {
               l?.classList.add('flipInY');
               l?.classList.add('existePosCorreta');
+
             }, 500 * atraso);
+
             atraso++;
-          } else if (this.palavra_sorteada.includes(letra)) {
+
+          } else if (this.palavra_sorteada.includes(this.resposta[index]) || this.verificarVogalExisteComoAcentuada(this.resposta[index])) {
+
             setTimeout(() => {
               l?.classList.add('flipInY');
               l?.classList.add('existePosErrada');
+
             }, 500 * atraso);
+
             atraso++;
+
           } else {
+
             setTimeout(() => {
               l?.classList.add('flipInY');
               l?.classList.add('naoExiste');
+
             }, 500 * atraso);
+
             atraso++;
           }
         });
         this.tentativa_atual++;
 
-        if(this.tentativa_atual == 6 ){
-          
+        if (this.tentativa_atual == 6) {
+
           setClassMsg();
           this.msgAviso = 'Á palavra correta era: ' + this.palavra_sorteada;
         }
@@ -271,7 +298,7 @@ export class TermoComponent implements OnInit {
   async focusPriEl(): Promise<void> {
     for (let i = 0; i < this.tentativas.length; i++) {
       const priEl = this.tentativas[i].findIndex((element: string) => element === '');
-  
+
       if (priEl !== -1) {
         await new Promise<void>((resolve) => {
           setTimeout(() => {
@@ -280,11 +307,57 @@ export class TermoComponent implements OnInit {
             resolve();
           });
         });
-          break;
+        break;
       }
     }
   }
 
+  montaRepostaDaMatriz():Promise<void>{
+    return new Promise((resolve)=>{
+      this.tentativas[this.tentativa_atual].forEach((letra: string, index: number) => {
+
+        if (this.lst_vogais_acentuadas[index]) {
+          const vogal_acentuada = this.lst_vogais_acentuadas[index];
+          if (letra == this.lst_vogais_acentuadas[index].normalize('NFD').replace(/[\u0300-\u036f]/g, '')) {
+            this.resposta += vogal_acentuada;
+            
+          } else {
+            this.resposta += letra;
+          }
+        } else {
+
+          this.resposta += letra;
+        }
+
+      });
+      resolve();
+    });
+  }
+
+  letraComAcento(letra:string, indexTentativa:number, indexLetra:number):string{
+    if(this.tentativa_atual != indexTentativa){
+      if(this.regex_vogais_sem_acento.test(letra)){
+        if (this.lst_vogais_acentuadas[indexLetra]) {
+          const vogal_acentuada = this.lst_vogais_acentuadas[indexLetra];
+          if (letra == this.lst_vogais_acentuadas[indexLetra].normalize('NFD').replace(/[\u0300-\u036f]/g, '')) {
+            return vogal_acentuada;
+          }
+        }
+      }
+    }
+
+    return letra; 
+  }
+
+  verificarVogalExisteComoAcentuada(letra:string):boolean {
+    let vogal_existe_como_acentuada:boolean = false;
+    this.lst_vogais_acentuadas.forEach((letraAcentuada:string)=>{
+      if(letraAcentuada.normalize('NFD').replace(/[\u0300-\u036f]/g, '') == letra){
+        vogal_existe_como_acentuada = true;
+      }
+    });
+    return vogal_existe_como_acentuada;
+  }
 
 
 
