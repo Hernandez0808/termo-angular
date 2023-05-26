@@ -74,7 +74,7 @@ export class TermoComponent implements OnInit {
     this.letras_palavra = [];
     this.lst_vogais_acentuadas = [];
     this.termo_service.getPalavras().subscribe(async (objJson: any) => {
-      this.lst_palavras = objJson.lst_palavras;
+      this.lst_palavras = JSON.parse(JSON.stringify(objJson.lst_palavras));
       console.log(this.lst_palavras);
       this.palavra_sorteada = this.sorteiaPalavra(objJson.lst_palavras.filter((p: string) => p.length == 5)).toLocaleUpperCase();
       this.letras_palavra = this.palavra_sorteada.split('');
