@@ -201,11 +201,12 @@ export class TermoComponent implements OnInit {
     if (linhaTotalmentePreenchida) {
 
       await this.montaRepostaDaMatriz();
-      if(!this.palavraExisteBase(this.resposta)){
-        setClassMsg();
-        this.msgAviso = 'Esta palavra não existe na base de dados';
+      // if(!this.palavraExisteBase(this.resposta)){
+      //   setClassMsg();
+      //   this.msgAviso = 'Esta palavra não existe na base de dados';
 
-      }else if (this.resposta == this.palavra_sorteada) {
+      // }else 
+      if (this.resposta == this.palavra_sorteada) {
 
           
         let atraso = 0;
