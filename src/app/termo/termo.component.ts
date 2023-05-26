@@ -25,6 +25,7 @@ export class TermoComponent implements OnInit {
   regex_vogais = /[áàãâéèẽêíìĩîóòõôúùũûç]/i;
   regex_vogais_sem_acento = /[aeiouc]/i;
   lst_vogais_acentuadas: string[] = [];
+  lst_palavras: string[] = [];
 
   lst_inputs_sub!: Subscription;
   palavra_sorteada: string = "destruído";
@@ -72,11 +73,12 @@ export class TermoComponent implements OnInit {
     this.tentativas = [];
     this.letras_palavra = [];
     this.lst_vogais_acentuadas = [];
-    this.termo_service.getPalavras().subscribe(async (lst_palavras: any) => {
-      this.palavra_sorteada = this.sorteiaPalavra(lst_palavras.lst_plavras_normais.filter((p: string) => p.length == 5)).toLocaleUpperCase();
-      // this.palavra_sorteada = 'CÚRUÇ'.toLocaleUpperCase();
+    this.termo_service.getPalavras().subscribe(async (objJson: any) => {
+      this.lst_palavras = objJson.lst_palavras;
+      console.log(this.lst_palavras);
+      this.palavra_sorteada = this.sorteiaPalavra(objJson.lst_palavras.filter((p: string) => p.length == 5)).toLocaleUpperCase();
       this.letras_palavra = this.palavra_sorteada.split('');
-      console.log(this.palavra_sorteada)
+
       for (let i = 0; this.palavra_sorteada.length >= i; i++) {
         let t: any[] = [];
         this.letras_palavra.forEach(() => {
@@ -199,8 +201,11 @@ export class TermoComponent implements OnInit {
     if (linhaTotalmentePreenchida) {
 
       await this.montaRepostaDaMatriz();
+      if(!this.lst_palavras.includes(this.resposta)){
+        setClassMsg();
+        this.msgAviso = 'Digite palavras válidas';
 
-      if (this.resposta == this.palavra_sorteada) {
+      }else if (this.resposta == this.palavra_sorteada) {
 
           
         let atraso = 0;
