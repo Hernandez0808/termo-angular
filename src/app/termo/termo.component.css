@@ -101,7 +101,7 @@ h1{
     box-sizing: border-box;
     font-size: 1rem;
     margin: 0 auto;
-    width: 17.75rem;
+    width: auto;
     min-height: 3rem;
     padding: 0.4em 1.5em;
     border-radius: 0.4em;

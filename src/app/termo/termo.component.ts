@@ -201,9 +201,9 @@ export class TermoComponent implements OnInit {
     if (linhaTotalmentePreenchida) {
 
       await this.montaRepostaDaMatriz();
-      if(!this.lst_palavras.includes(this.resposta)){
+      if(!this.palavraExisteBase(this.resposta)){
         setClassMsg();
-        this.msgAviso = 'Digite palavras válidas';
+        this.msgAviso = 'Esta palavra não existe na base de dados';
 
       }else if (this.resposta == this.palavra_sorteada) {
 
@@ -362,6 +362,10 @@ export class TermoComponent implements OnInit {
       }
     });
     return vogal_existe_como_acentuada;
+  }
+
+  palavraExisteBase(resposta: string): boolean {
+    return this.lst_palavras.filter((p: string) => p.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === resposta).length > 0;
   }
 
 
