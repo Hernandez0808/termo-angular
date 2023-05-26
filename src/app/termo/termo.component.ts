@@ -365,7 +365,7 @@ export class TermoComponent implements OnInit {
   }
 
   palavraExisteBase(resposta: string): boolean {
-    return this.lst_palavras.filter((p: string) => p.normalize('NFD').replace(/[\u0300-\u036f]/g, '') === resposta).length > 0;
+    return this.lst_palavras.filter((p: string) => p.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleUpperCase() === resposta.normalize('NFD').replace(/[\u0300-\u036f]/g, '')).length > 0;
   }
 
 
